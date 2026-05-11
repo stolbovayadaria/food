@@ -5,7 +5,7 @@ function connectDB()
     return new PDO('mysql:host=localhost;dbname=eat', 'root', '');
 }
 
-// ВСЕ РЕСТОРАНЫ
+// все рест
 function getAllPlaces($pdo)
 {
     $sql = "SELECT id, name, address, cuisine_type, menu_photo FROM places ORDER BY name";
@@ -14,7 +14,7 @@ function getAllPlaces($pdo)
     return $stmt->fetchAll();
 }
 
-// ОДИН РЕСТОРАН
+// 1 рест
 function getPlaceById($pdo, $id)
 {
     $sql = "SELECT id, name, address, cuisine_type, menu_photo FROM places WHERE id = :id";
@@ -23,7 +23,7 @@ function getPlaceById($pdo, $id)
     return $stmt->fetch();
 }
 
-// ДОБАВИТЬ РЕСТОРАН
+// +рест
 function addPlace($pdo, $data)
 {
     $sql = "INSERT INTO places (name, address, cuisine_type, menu_photo) VALUES (:name, :address, :cuisine, :photo)";
@@ -31,7 +31,7 @@ function addPlace($pdo, $data)
     $stmt->execute($data);
 }
 
-// ОБНОВИТЬ РЕСТОРАН
+// обнов
 function updatePlace($pdo, $data)
 {
     $sql = "UPDATE places SET name = :name, address = :address, cuisine_type = :cuisine, menu_photo = :photo WHERE id = :id";
@@ -39,7 +39,7 @@ function updatePlace($pdo, $data)
     $stmt->execute($data);
 }
 
-// УДАЛИТЬ РЕСТОРАН
+// удал 
 function deletePlace($pdo, $id)
 {
     $sql = "DELETE FROM places WHERE id = :id";
@@ -47,7 +47,7 @@ function deletePlace($pdo, $id)
     $stmt->execute(['id' => $id]);
 }
 
-// ВСЕ БЛЮДА РЕСТОРАНА
+// все блюда рест
 function getDishes($pdo, $placeId)
 {
     $sql = "SELECT id, name, price, photo FROM dishes WHERE place_id = :place_id ORDER BY name";
@@ -56,7 +56,7 @@ function getDishes($pdo, $placeId)
     return $stmt->fetchAll();
 }
 
-// ДОБАВИТЬ БЛЮДО
+// добав 
 function addDish($pdo, $data)
 {
     $sql = "INSERT INTO dishes (place_id, name, price, photo) VALUES (:place_id, :name, :price, :photo)";
@@ -64,7 +64,7 @@ function addDish($pdo, $data)
     $stmt->execute($data);
 }
 
-// УДАЛИТЬ БЛЮДО
+// удал 
 function deleteDish($pdo, $id)
 {
     $sql = "DELETE FROM dishes WHERE id = :id";
@@ -72,7 +72,7 @@ function deleteDish($pdo, $id)
     $stmt->execute(['id' => $id]);
 }
 
-// ВСЕ ОТЗЫВЫ
+// все отзывы
 function getReviews($pdo, $placeId)
 {
     $sql = "SELECT reviews.id, reviews.comment, reviews.visit_date, reviews.user_id, users.name 
@@ -85,7 +85,7 @@ function getReviews($pdo, $placeId)
     return $stmt->fetchAll();
 }
 
-// УДАЛИТЬ ОТЗЫВ
+// удал
 function deleteReview($pdo, $id)
 {
     $sql = "DELETE FROM reviews WHERE id = :id";
@@ -93,7 +93,7 @@ function deleteReview($pdo, $id)
     $stmt->execute(['id' => $id]);
 }
 
-// ПРОВЕРИТЬ ИЗБРАННОЕ
+// проверка избранного
 function isFav($pdo, $userId, $placeId)
 {
     $sql = "SELECT id FROM favourites WHERE user_id = :user_id AND place_id = :place_id";
@@ -107,7 +107,7 @@ function isFav($pdo, $userId, $placeId)
     }
 }
 
-// ДОБАВИТЬ В ИЗБРАННОЕ
+// +избран
 function addFav($pdo, $userId, $placeId)
 {
     $sql = "INSERT INTO favourites (user_id, place_id) VALUES (:user_id, :place_id)";
@@ -115,7 +115,7 @@ function addFav($pdo, $userId, $placeId)
     $stmt->execute(['user_id' => $userId, 'place_id' => $placeId]);
 }
 
-// УДАЛИТЬ ИЗ ИЗБРАННОГО
+// удал
 function removeFav($pdo, $userId, $placeId)
 {
     $sql = "DELETE FROM favourites WHERE user_id = :user_id AND place_id = :place_id";
@@ -123,7 +123,7 @@ function removeFav($pdo, $userId, $placeId)
     $stmt->execute(['user_id' => $userId, 'place_id' => $placeId]);
 }
 
-// ВСЕ ИЗБРАННЫЕ РЕСТОРАНЫ
+// все избран
 function getFavPlaces($pdo, $userId)
 {
     $sql = "SELECT places.id, places.name, places.address, places.cuisine_type, places.menu_photo 
@@ -136,7 +136,7 @@ function getFavPlaces($pdo, $userId)
     return $stmt->fetchAll();
 }
 
-// ПОЛЬЗОВАТЕЛЬ ПО EMAIL И ПАРОЛЮ
+// юзер о данным 
 function getUser($pdo, $email, $password)
 {
     $sql = "SELECT id, name, email, is_admin FROM users WHERE email = :email AND password = :password";
@@ -145,7 +145,7 @@ function getUser($pdo, $email, $password)
     return $stmt->fetch();
 }
 
-// ПОЛЬЗОВАТЕЛЬ ПО ID
+// юз по id
 function getUserById($pdo, $userId)
 {
     $sql = "SELECT id, name, email, is_admin FROM users WHERE id = :id";
@@ -154,7 +154,7 @@ function getUserById($pdo, $userId)
     return $stmt->fetch();
 }
 
-// ПРОВЕРИТЬ EMAIL
+// проверка
 function emailExists($pdo, $email)
 {
     $sql = "SELECT id FROM users WHERE email = :email";
@@ -168,7 +168,7 @@ function emailExists($pdo, $email)
     }
 }
 
-// ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ
+// +юзер
 function addUser($pdo, $data)
 {
     $sql = "INSERT INTO users (name, email, password, is_admin) VALUES (:name, :email, :password, 0)";

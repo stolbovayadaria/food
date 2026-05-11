@@ -25,7 +25,7 @@ if (isset($_GET['action'])) {
     $action = 'list';
 }
 
-// ДОБАВЛЕНИЕ РЕСТОРАНА
+// +рест
 if ($action == 'add_place') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $menuPhoto = '';
@@ -43,7 +43,7 @@ if ($action == 'add_place') {
     }
 }
 
-// РЕДАКТИРОВАНИЕ РЕСТОРАНА
+// редакт 
 if ($action == 'edit_place') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $menuPhoto = '';
@@ -62,14 +62,14 @@ if ($action == 'edit_place') {
     }
 }
 
-// УДАЛЕНИЕ РЕСТОРАНА
+// удаление
 if ($action == 'delete_place') {
     deletePlace($pdo, $_GET['id']);
     header('Location: panel.php');
     exit;
 }
 
-// ДОБАВЛЕНИЕ БЛЮДА - ИСПРАВЛЕНО
+// +блюдо
 if ($action == 'add_dish') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $photo = '';
@@ -87,7 +87,7 @@ if ($action == 'add_dish') {
     }
 }
 
-// ЕСЛИ ACTION ПРИШЁЛ ЧЕРЕЗ POST (ДЛЯ КНОПКИ С name="action")
+// если action пришел через post (name="action")
 if (isset($_POST['action']) && $_POST['action'] == 'add_dish') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $photo = '';
@@ -105,20 +105,20 @@ if (isset($_POST['action']) && $_POST['action'] == 'add_dish') {
     }
 }
 
-// УДАЛЕНИЕ БЛЮДА
+// удаление
 if ($action == 'delete_dish') {
     deleteDish($pdo, $_GET['id']);
     header("Location: panel.php?action=dishes&place_id=" . $_GET['place_id']);
     exit;
 }
 
-// ПОКАЗ ФОРМЫ ДОБАВЛЕНИЯ РЕСТОРАНА
+// форма +рест
 if ($action == 'add_place') {
     include '../views/admin/add.view.php';
     exit;
 }
 
-// ПОКАЗ ФОРМЫ РЕДАКТИРОВАНИЯ РЕСТОРАНА
+//форма редакт рест
 if ($action == 'edit_place') {
     if (isset($_GET['edit_id'])) {
         $place = getPlaceById($pdo, $_GET['edit_id']);
@@ -127,7 +127,7 @@ if ($action == 'edit_place') {
     }
 }
 
-// ПОКАЗ БЛЮД
+// показ блюд
 if ($action == 'dishes') {
     if (isset($_GET['place_id'])) {
         $dishes = getDishes($pdo, $_GET['place_id']);
@@ -138,7 +138,7 @@ if ($action == 'dishes') {
     }
 }
 
-// ГЛАВНАЯ АДМИНКИ
+// админ панель
 $places = getAllPlaces($pdo);
 include '../views/admin/list.view.php';
 ?>

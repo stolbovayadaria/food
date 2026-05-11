@@ -59,7 +59,7 @@
 <div class="container py-4">
     <a href="index.php" class="btn btn-outline-secondary mb-3">На главную</a>
 
-    <!-- КАРТОЧКА РЕСТОРАНА -->
+    <!-- 1 рест -->
     <div class="card mb-4">
         <div class="card-body">
             <h2><?php echo $place['name']; ?></h2>
@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    <!-- МЕНЮ -->
+    <!-- меню -->
     <div class="card mb-4">
         <div class="card-header bg-info text-white">Меню ресторана</div>
         <div class="card-body">
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <!-- ОТЗЫВЫ -->
+    <!-- отзыв -->
     <div class="card">
         <div class="card-header bg-success text-white">Отзывы</div>
         <div class="card-body">
@@ -138,7 +138,7 @@
                         </div>
                         <p class="mt-2"><?php echo nl2br($review['comment']); ?></p>
                         
-                        <!-- ВЫВОД ФОТО ОТЗЫВА -->
+                        <!-- вывод фото отзыв -->
                         <?php if (count($review['photos']) > 0) { ?>
                             <div class="row mt-2">
                                 <?php foreach ($review['photos'] as $photo) { ?>
