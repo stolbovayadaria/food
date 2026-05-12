@@ -5,6 +5,7 @@
     <title><?php echo $place['name']; ?> - FoodTracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    
     <style>
         .dish-card {
             margin-bottom: 15px;
@@ -35,31 +36,38 @@
 </head>
 <body>
 
+<!-- все кнопки -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.php">FoodTracker</a>
         <div class="navbar-nav ms-auto">
+            
             <?php if ($userId > 0) { ?>
                 <span class="nav-link text-white">Привет, <?php echo $userName; ?></span>
+                
                 <?php if ($isAdmin == false) { ?>
                     <a class="nav-link" href="user/profile.php">Профиль</a>
                     <a class="nav-link" href="index.php?show=favourites">Избранное</a>
                 <?php } ?>
+                
                 <?php if ($isAdmin == true) { ?>
                     <a class="nav-link btn btn-outline-warning btn-sm ms-2" href="admin/panel.php">Админ панель</a>
                 <?php } ?>
+                
                 <a class="nav-link btn btn-outline-danger btn-sm ms-2" href="logout.php">Выйти</a>
+                
             <?php } else { ?>
                 <a class="nav-link" href="login.php">Вход</a>
             <?php } ?>
+            
         </div>
     </div>
 </nav>
 
 <div class="container py-4">
     <a href="index.php" class="btn btn-outline-secondary mb-3">На главную</a>
-
-    <!-- 1 рест -->
+    
+    <!-- ресторан -->
     <div class="card mb-4">
         <div class="card-body">
             <h2><?php echo $place['name']; ?></h2>
@@ -81,7 +89,7 @@
             <?php } ?>
         </div>
     </div>
-
+    
     <!-- меню -->
     <div class="card mb-4">
         <div class="card-header bg-info text-white">Меню ресторана</div>
@@ -107,8 +115,8 @@
             <?php } ?>
         </div>
     </div>
-
-    <!-- отзыв -->
+    
+    <!-- отзывы -->
     <div class="card">
         <div class="card-header bg-success text-white">Отзывы</div>
         <div class="card-body">
@@ -118,17 +126,20 @@
                     <form method="post" class="mb-4 p-3 bg-light rounded">
                         <label class="form-label">Дата посещения</label>
                         <input type="date" name="visit_date" class="form-control mb-2" required>
+                        
                         <label class="form-label">Ваш отзыв</label>
                         <textarea name="comment" class="form-control mb-2" rows="3" required></textarea>
+                        
                         <label class="form-label">Ссылка на фото (необязательно)</label>
                         <input type="url" name="photo" class="form-control mb-2" placeholder="https://example.com/photo.jpg">
+                        
                         <button type="submit" name="add_review" class="btn btn-success">Отправить отзыв</button>
                     </form>
                 <?php } ?>
             <?php } else { ?>
                 <div class="alert alert-info mb-4">Чтобы оставить отзыв, <a href="login.php">войдите в систему</a></div>
             <?php } ?>
-
+            
             <?php if (count($reviews) > 0) { ?>
                 <?php foreach ($reviews as $review) { ?>
                     <div class="border-bottom pb-3 mb-3">
@@ -138,7 +149,6 @@
                         </div>
                         <p class="mt-2"><?php echo nl2br($review['comment']); ?></p>
                         
-                        <!-- вывод фото отзыв -->
                         <?php if (count($review['photos']) > 0) { ?>
                             <div class="row mt-2">
                                 <?php foreach ($review['photos'] as $photo) { ?>

@@ -8,23 +8,32 @@
 </head>
 <body class="bg-light">
 
+<!-- все кнопки -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.php">FoodTracker</a>
         <div class="navbar-nav ms-auto">
+            
             <?php if ($userId > 0) { ?>
+                <!-- пользователь -->
                 <span class="nav-link text-white">Привет, <?php echo $userName; ?></span>
+                
                 <?php if ($isAdmin == false) { ?>
                     <a class="nav-link" href="user/profile.php">Профиль</a>
                     <a class="nav-link" href="index.php?show=favourites">Избранное</a>
                 <?php } ?>
+                
                 <?php if ($isAdmin == true) { ?>
                     <a class="nav-link btn btn-outline-warning btn-sm ms-2" href="admin/panel.php">Админ панель</a>
                 <?php } ?>
+                
                 <a class="nav-link btn btn-outline-danger btn-sm ms-2" href="logout.php">Выйти</a>
+                
             <?php } else { ?>
+                <!-- гость -->
                 <a class="nav-link" href="login.php">Вход</a>
             <?php } ?>
+            
         </div>
     </div>
 </nav>
@@ -32,6 +41,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1><?php echo $pageTitle; ?></h1>
+        
         <?php if ($showFav == true) { ?>
             <a href="index.php" class="btn btn-outline-secondary">Все рестораны</a>
         <?php } ?>

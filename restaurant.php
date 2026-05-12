@@ -6,9 +6,11 @@ $userId = 0;
 $userName = '';
 $isAdmin = false;
 
+// проверка авторизации
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
     $userName = $_SESSION['user_name'];
+    
     if ($_SESSION['is_admin'] == 1) {
         $isAdmin = true;
     }
@@ -18,6 +20,7 @@ $pdo = connectDB();
 $placeId = $_GET['id'];
 $place = getPlaceById($pdo, $placeId);
 
+// если не найден
 if (!$place) {
     header('Location: index.php');
     exit;
@@ -26,7 +29,7 @@ if (!$place) {
 $dishes = getDishes($pdo, $placeId);
 $reviews = getReviews($pdo, $placeId);
 
-// фото отзыва
+// фото каждого отзыва
 foreach ($reviews as $key => $review) {
     $sql = "SELECT id, photo FROM review_photos WHERE review_id = :review_id";
     $stmt = $pdo->prepare($sql);
@@ -35,18 +38,20 @@ foreach ($reviews as $key => $review) {
 }
 
 $inFav = false;
+
+// проверка избранного
 if ($userId > 0) {
     if ($isAdmin == false) {
         $inFav = isFav($pdo, $userId, $placeId);
     }
 }
 
-// +отзыв с фото
+// обработка добавления отзыва
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_review'])) {
         if ($userId > 0) {
             if ($isAdmin == false) {
-                // ДОБАВЛЯЕМ ОТЗЫВ
+                // добавление
                 $sql = "INSERT INTO reviews (place_id, user_id, comment, visit_date) VALUES (:place_id, :user_id, :comment, :visit_date)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
@@ -56,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'visit_date' => $_POST['visit_date']
                 ]);
                 
-                // id нового рест
+                // id нового отзыва
                 $reviewId = $pdo->lastInsertId();
                 
-                // +фото
+                // +фото если есть
                 if ($_POST['photo'] != '') {
                     $sql2 = "INSERT INTO review_photos (review_id, photo) VALUES (:review_id, :photo)";
                     $stmt2 = $pdo->prepare($sql2);
@@ -76,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// удал 
+// обраотка удаления отзыва
 if (isset($_GET['delete_review'])) {
     if ($userId > 0) {
         deleteReview($pdo, $_GET['delete_review']);
@@ -85,7 +90,7 @@ if (isset($_GET['delete_review'])) {
     }
 }
 
-// +избран
+// обработка добавления в избр
 if (isset($_GET['add_fav'])) {
     if ($userId > 0) {
         if ($isAdmin == false) {
@@ -96,7 +101,7 @@ if (isset($_GET['add_fav'])) {
     }
 }
 
-// удал
+// обработка удаление из избр
 if (isset($_GET['remove_fav'])) {
     if ($userId > 0) {
         if ($isAdmin == false) {

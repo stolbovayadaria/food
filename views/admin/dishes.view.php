@@ -17,26 +17,26 @@
         <div class="card-header bg-success text-white">Добавить блюдо</div>
         <div class="card-body">
             <form method="post">
-    <input type="hidden" name="place_id" value="<?php echo $_GET['place_id']; ?>">
-    <div class="row">
-        <div class="col-md-5">
-            <input type="text" name="name" class="form-control mb-2" placeholder="Название" required>
-        </div>
-        <div class="col-md-3">
-            <input type="number" step="0.01" name="price" class="form-control mb-2" placeholder="Цена" required>
-        </div>
-        <div class="col-md-3">
-            <input type="url" name="photo" class="form-control mb-2" placeholder="Ссылка на фото">
-        </div>
-        <div class="col-md-1">
-            <button type="submit" name="action" value="add_dish" class="btn btn-success w-100">+</button>
-        </div>
-    </div>
-</form>
+                <input type="hidden" name="place_id" value="<?php echo $_GET['place_id']; ?>">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="text" name="name" class="form-control mb-2" placeholder="Название" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" step="0.01" name="price" class="form-control mb-2" placeholder="Цена" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="url" name="photo" class="form-control mb-2" placeholder="Ссылка на фото">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" name="action" value="add_dish" class="btn btn-success w-100">+</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     
-    <div class="card">
+     <div class="card">
         <div class="card-header bg-info text-white">Список блюд</div>
         <div class="card-body">
             <?php if (count($dishes) > 0) { ?>
@@ -52,8 +52,14 @@
                                 <span class="text-success"><?php echo number_format($dish['price'], 0); ?> руб</span>
                             </div>
                         </div>
-                        <a href="panel.php?action=delete_dish&id=<?php echo $dish['id']; ?>&place_id=<?php echo $_GET['place_id']; ?>" 
-                           class="btn btn-sm btn-danger" onclick="return confirm('Удалить блюдо?')">Удалить</a>
+                        <div>
+                            <!-- НОВАЯ КНОПКА ИЗМЕНИТЬ -->
+                            <a href="panel.php?action=edit_dish&id=<?php echo $dish['id']; ?>&place_id=<?php echo $_GET['place_id']; ?>" 
+                               class="btn btn-warning btn-sm">Изменить</a>
+                            
+                            <a href="panel.php?action=delete_dish&id=<?php echo $dish['id']; ?>&place_id=<?php echo $_GET['place_id']; ?>" 
+                               class="btn btn-danger btn-sm" onclick="return confirm('Удалить блюдо?')">Удалить</a>
+                        </div>
                     </div>
                 <?php } ?>
             <?php } else { ?>

@@ -4,6 +4,13 @@ require 'Models/models.php';
 
 $pdo = connectDB();
 
+// проверка авторизации
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
+
+// определение формы 
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
 } else {
@@ -12,13 +19,19 @@ if (isset($_GET['action'])) {
 
 $error = '';
 
+// обработка входа
 if ($action == 'login') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $user = getUser($pdo, $_POST['email'], $_POST['password']);
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        
+        $user = getUser($pdo, $email, $password);
+        
         if ($user) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['is_admin'] = $user['is_admin'];
+            
             header('Location: index.php');
             exit;
         } else {
@@ -27,17 +40,19 @@ if ($action == 'login') {
     }
 }
 
+// обработка регистрации
 if ($action == 'register') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $emailExists = emailExists($pdo, $_POST['email']);
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        
+        $emailExists = emailExists($pdo, $email);
+        
         if ($emailExists == true) {
             $error = 'Пользователь с таким email уже существует';
         } else {
-            addUser($pdo, [
-                'name' => $_POST['name'],
-                'email' => $_POST['email'],
-                'password' => $_POST['password']
-            ]);
+            addUser($pdo, $name, $email, $password);
             header('Location: login.php');
             exit;
         }
@@ -49,7 +64,7 @@ if ($action == 'register') {
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <title>FoodTracker</title>
+    <title><?php if ($action == 'login') { echo 'Вход'; } else { echo 'Регистрация'; } ?> - FoodTracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -59,8 +74,9 @@ if ($action == 'register') {
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow">
-                <div class="card-header bg-success text-white">
-                    <h4>Вход в систему</h4>
+                <div class="card-header 
+                    <?php if ($action == 'login') { echo 'bg-success'; } else { echo 'bg-info'; } ?> text-white">
+                    <h4><?php if ($action == 'login') { echo 'Вход в систему'; } else { echo 'Регистрация'; } ?></h4>
                 </div>
                 <div class="card-body">
                     
@@ -68,16 +84,23 @@ if ($action == 'register') {
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php } ?>
                     
-                    <form method="post">
-                        <?php if ($action == 'register') { ?>
+                    <?php if ($action == 'login') { ?>
+                        <!-- вход -->
+                        <form method="post">
+                            <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                            <input type="password" name="password" class="form-control mb-3" placeholder="Пароль" required>
+                            <button type="submit" class="btn btn-success w-100">Войти</button>
+                        </form>
+                    <?php } else { ?>
+                        <!-- регистрация -->
+                        <form method="post">
                             <input type="text" name="name" class="form-control mb-2" placeholder="Ваше имя" required>
-                        <?php } ?>
-                        <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
-                        <input type="password" name="password" class="form-control mb-3" placeholder="Пароль" required>
-                        <button type="submit" class="btn btn-success w-100">
-                            <?php if ($action == 'login') { echo 'Войти'; } else { echo 'Зарегистрироваться'; } ?>
-                        </button>
-                    </form>
+                            <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                            <input type="password" name="password" class="form-control mb-3" placeholder="Пароль" required>
+                            <button type="submit" class="btn btn-info w-100">Зарегистрироваться</button>
+                        </form>
+                    <?php } ?>
+                    
                 </div>
                 <div class="card-footer text-center">
                     <?php if ($action == 'login') { ?>
